@@ -16,19 +16,160 @@ class MiJornadaPro {
             comision: 25.00
         };
 
+        this.wakeLock = null;
+
         this.init();
     }
 
     init() {
         this.loadSettings();
+        this.restoreTimerState();
         this.setupEventListeners();
+        this.setupPageVisibilityHandlers();
         this.updateTodayStats();
         this.updateReports();
         this.loadHistory();
         this.updateTimer();
+        this.startPersistentTimer();
     }
 
-    // Event Listeners
+    // Timer State Persistence
+    restoreTimerState() {
+        const savedState = localStorage.getItem('timerState');
+        if (savedState) {
+            const state = JSON.parse(savedState);
+            
+            if (state.isRunning) {
+                const now = Date.now();
+                const elapsedSinceLastUpdate = now - state.lastUpdate;
+                
+                this.timer.isRunning = true;
+                this.timer.isPaused = state.isPaused;
+                this.timer.startTime = state.startTime;
+                this.timer.pausedTime = state.pausedTime;
+                
+                // Si no está pausado, agregar el tiempo que pasó mientras la app estaba cerrada
+                if (!state.isPaused) {
+                    this.timer.startTime = state.startTime;
+                    this.updateTimerControls();
+                    this.updateStatus('working');
+                    this.showBackgroundTimerBadge();
+                    this.requestWakeLock();
+                } else {
+                    this.updateTimerControls();
+                    this.updateStatus('paused');
+                    document.getElementById('pause-btn').innerHTML = '<i class="fas fa-play"></i> Reanudar';
+                }
+                
+                this.showNotification('¡Jornada restaurada! El cronómetro siguió funcionando en segundo plano', 'background');
+            }
+        }
+    }
+
+    saveTimerState() {
+        const state = {
+            isRunning: this.timer.isRunning,
+            isPaused: this.timer.isPaused,
+            startTime: this.timer.startTime,
+            pausedTime: this.timer.pausedTime,
+            lastUpdate: Date.now()
+        };
+        localStorage.setItem('timerState', JSON.stringify(state));
+    }
+
+    clearTimerState() {
+        localStorage.removeItem('timerState');
+    }
+
+    setupPageVisibilityHandlers() {
+        // Guardar estado cuando la página se oculta
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && this.timer.isRunning && !this.timer.isPaused) {
+                this.saveTimerState();
+                console.log('Aplicación en segundo plano - Estado guardado');
+            } else if (!document.hidden && this.timer.isRunning && !this.timer.isPaused) {
+                // La aplicación vuelve a estar activa
+                this.updateTimer();
+                console.log('Aplicación activa - Cronómetro actualizado');
+            }
+        });
+
+        // Guardar estado antes de cerrar la ventana
+        window.addEventListener('beforeunload', () => {
+            this.saveTimerState();
+        });
+
+        // Detectar cuando la aplicación se cierra/minimiza en móviles
+        window.addEventListener('pagehide', () => {
+            this.saveTimerState();
+        });
+
+        // Detectar cuando la aplicación vuelve a estar visible en móviles
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted && this.timer.isRunning) {
+                this.updateTimer();
+                if (!this.timer.isPaused) {
+                    this.showBackgroundTimerBadge();
+                }
+            }
+        });
+    }
+
+    startPersistentTimer() {
+        // Cronómetro que se actualiza cada segundo
+        setInterval(() => {
+            if (this.timer.isRunning && !this.timer.isPaused) {
+                this.updateTimer();
+                // Guardar estado cada 5 segundos para mayor seguridad
+                if (Date.now() % 5000 < 1000) {
+                    this.saveTimerState();
+                }
+            }
+        }, 1000);
+
+        // Respaldo adicional: guardar estado cada 30 segundos
+        setInterval(() => {
+            if (this.timer.isRunning) {
+                this.saveTimerState();
+            }
+        }, 30000);
+    }
+
+    // Wake Lock Functions
+    async requestWakeLock() {
+        if ('wakeLock' in navigator) {
+            try {
+                this.wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock activado - La pantalla se mantendrá activa');
+                
+                this.wakeLock.addEventListener('release', () => {
+                    console.log('Wake Lock liberado');
+                });
+            } catch (err) {
+                console.log('Error al activar Wake Lock:', err);
+            }
+        }
+    }
+
+    releaseWakeLock() {
+        if (this.wakeLock) {
+            this.wakeLock.release();
+            this.wakeLock = null;
+            console.log('Wake Lock liberado manualmente');
+        }
+    }
+
+    // Background Timer Badge
+    showBackgroundTimerBadge() {
+        const badge = document.getElementById('background-timer-badge');
+        badge.classList.add('active');
+    }
+
+    hideBackgroundTimerBadge() {
+        const badge = document.getElementById('background-timer-badge');
+        badge.classList.remove('active');
+    }
+
     setupEventListeners() {
         // Navigation
         document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -96,10 +237,14 @@ class MiJornadaPro {
             this.timer.startTime = Date.now() - this.timer.pausedTime;
             this.timer.isRunning = true;
             this.timer.isPaused = false;
-            this.timer.interval = setInterval(() => this.updateTimer(), 1000);
             
             this.updateTimerControls();
             this.updateStatus('working');
+            this.saveTimerState();
+            this.requestWakeLock();
+            this.showBackgroundTimerBadge();
+            
+            this.showNotification('¡Jornada iniciada! El cronómetro funcionará en segundo plano', 'success');
         }
     }
 
@@ -107,17 +252,25 @@ class MiJornadaPro {
         if (this.timer.isRunning && !this.timer.isPaused) {
             this.timer.isPaused = true;
             this.timer.pausedTime = Date.now() - this.timer.startTime;
-            clearInterval(this.timer.interval);
             
             document.getElementById('pause-btn').innerHTML = '<i class="fas fa-play"></i> Reanudar';
             this.updateStatus('paused');
+            this.saveTimerState();
+            this.releaseWakeLock();
+            this.hideBackgroundTimerBadge();
+            
+            this.showNotification('Cronómetro pausado', 'warning');
         } else if (this.timer.isPaused) {
             this.timer.startTime = Date.now() - this.timer.pausedTime;
             this.timer.isPaused = false;
-            this.timer.interval = setInterval(() => this.updateTimer(), 1000);
             
             document.getElementById('pause-btn').innerHTML = '<i class="fas fa-pause"></i> Pausar';
             this.updateStatus('working');
+            this.saveTimerState();
+            this.requestWakeLock();
+            this.showBackgroundTimerBadge();
+            
+            this.showNotification('Cronómetro reanudado', 'success');
         }
     }
 
@@ -247,6 +400,9 @@ class MiJornadaPro {
             isPaused: false
         };
         
+        this.clearTimerState();
+        this.releaseWakeLock();
+        this.hideBackgroundTimerBadge();
         document.getElementById('timer-display').textContent = '00:00:00';
         this.updateTimerControls();
         this.updateStatus('rest');

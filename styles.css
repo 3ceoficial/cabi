@@ -584,6 +584,47 @@ body {
 .mt-1 { margin-top: 0.5rem; }
 .mt-2 { margin-top: 1rem; }
 
+/* Background Timer Indicator */
+.background-timer-badge {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(45deg, #10b981, #059669);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    z-index: 999;
+    animation: pulse 2s infinite;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    display: none;
+}
+
+.background-timer-badge.active {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.background-timer-badge .timer-dot {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
+
+/* Enhanced Notification Styles */
+.notification.background {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
 /* Empty State */
 .empty-state {
     text-align: center;

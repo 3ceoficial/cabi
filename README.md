@@ -4,6 +4,22 @@
 
 Una aplicación web responsive diseñada específicamente para que los repartidores de moto de Cabify puedan registrar, calcular y analizar sus jornadas de trabajo de manera eficiente.
 
+## ⚡ **CRONÓMETRO EN SEGUNDO PLANO** ⚡
+
+**🎯 NUEVA FUNCIONALIDAD CLAVE:** La aplicación ahora **mantiene el cronómetro funcionando** incluso cuando:
+- Cierras la aplicación ❌
+- Cambias a otra app ❌ 
+- Bloqueas el teléfono ❌
+- Minimizas el navegador ❌
+
+**✅ Al regresar:** El cronómetro se restaura automáticamente con el tiempo correcto, incluyendo todo el tiempo que pasó mientras la app estaba cerrada.
+
+**🟢 Indicador Visual:** Un badge verde te confirma que el cronómetro está funcionando en segundo plano.
+
+*Para más detalles, ver: [FUNCIONAMIENTO_SEGUNDO_PLANO.md](./FUNCIONAMIENTO_SEGUNDO_PLANO.md)*
+
+---
+
 ## ✨ Características Principales
 
 ### ⏱️ **Registro de Jornadas**
