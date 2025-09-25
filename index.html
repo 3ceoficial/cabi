@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Jornada Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Mi Jornada Pro">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-motorcycle"></i> Mi Jornada Pro</h1>
+            <div class="status-indicator" id="status-indicator">
+                <span class="status-text" id="status-text">Descanso</span>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="home"><i class="fas fa-home"></i> Inicio</button>
+            <button class="nav-tab" data-tab="history"><i class="fas fa-history"></i> Historial</button>
+            <button class="nav-tab" data-tab="reports"><i class="fas fa-chart-line"></i> Reportes</button>
+            <button class="nav-tab" data-tab="settings"><i class="fas fa-cog"></i> Config</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Tab -->
+            <div class="tab-content active" id="home">
+                <!-- Timer Display -->
+                <div class="timer-card">
+                    <div class="timer-display">
+                        <span class="timer-time" id="timer-display">00:00:00</span>
+                        <span class="timer-label">Tiempo de Jornada</span>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="btn btn-success" id="start-btn">
+                            <i class="fas fa-play"></i> Iniciar Jornada
+                        </button>
+                        <button class="btn btn-warning" id="pause-btn" style="display: none;">
+                            <i class="fas fa-pause"></i> Pausar
+                        </button>
+                        <button class="btn btn-danger" id="stop-btn" style="display: none;">
+                            <i class="fas fa-stop"></i> Finalizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Today's Stats -->
+                <div class="stats-card">
+                    <h3>Resumen de Hoy</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="today-hours">0.0h</span>
+                            <span class="stat-label">Horas Trabajadas</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="today-km">0 km</span>
+                            <span class="stat-label">Kilómetros</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="today-earnings">$0</span>
+                            <span class="stat-label">Ganancia Neta</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="today-trips">0</span>
+                            <span class="stat-label">Viajes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Trip Entry -->
+                <div class="trip-card">
+                    <h3>Registrar Viaje Rápido</h3>
+                    <div class="trip-form">
+                        <div class="input-group">
+                            <label>Kilómetros del Viaje</label>
+                            <input type="number" id="trip-km" step="0.1" placeholder="0.0">
+                        </div>
+                        <div class="input-group">
+                            <label>Minutos del Viaje</label>
+                            <input type="number" id="trip-minutes" placeholder="0">
+                        </div>
+                        <button class="btn btn-primary" id="add-trip-btn">
+                            <i class="fas fa-plus"></i> Agregar Viaje
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-content" id="history">
+                <div class="section-header">
+                    <h2>Historial de Jornadas</h2>
+                    <div class="filter-controls">
+                        <input type="date" id="filter-date" class="date-filter">
+                        <button class="btn btn-sm" id="clear-filter">Limpiar</button>
+                    </div>
+                </div>
+                <div class="history-list" id="history-list">
+                    <!-- Jornadas se cargarán aquí dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div class="tab-content" id="reports">
+                <div class="section-header">
+                    <h2>Reportes y Métricas</h2>
+                    <select id="report-period" class="period-selector">
+                        <option value="week">Esta Semana</option>
+                        <option value="month">Este Mes</option>
+                        <option value="all">Todo el Tiempo</option>
+                    </select>
+                </div>
+                
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h3>Resumen del Período</h3>
+                        <div class="metric-row">
+                            <span class="metric-label">Total Horas:</span>
+                            <span class="metric-value" id="period-hours">0h</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Total Kilómetros:</span>
+                            <span class="metric-value" id="period-km">0 km</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Ganancia Neta:</span>
+                            <span class="metric-value" id="period-earnings">$0</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Total Viajes:</span>
+                            <span class="metric-value" id="period-trips">0</span>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <h3>Promedios</h3>
+                        <div class="metric-row">
+                            <span class="metric-label">Por Hora:</span>
+                            <span class="metric-value" id="avg-per-hour">$0/h</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Por Kilómetro:</span>
+                            <span class="metric-value" id="avg-per-km">$0/km</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Por Viaje:</span>
+                            <span class="metric-value" id="avg-per-trip">$0</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Horas/Día:</span>
+                            <span class="metric-value" id="avg-hours-day">0h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settings">
+                <div class="section-header">
+                    <h2>Configuración</h2>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Tarifas de Cabify</h3>
+                    <div class="settings-form">
+                        <div class="input-group">
+                            <label>Tarifa Inicial ($)</label>
+                            <input type="number" id="tarifa-inicial" step="0.01" value="728.00">
+                        </div>
+                        <div class="input-group">
+                            <label>Precio por Kilómetro ($)</label>
+                            <input type="number" id="precio-km" step="0.01" value="247.00">
+                        </div>
+                        <div class="input-group">
+                            <label>Precio por Minuto ($)</label>
+                            <input type="number" id="precio-minuto" step="0.01" value="106.00">
+                        </div>
+                        <div class="input-group">
+                            <label>Tarifa Mínima ($)</label>
+                            <input type="number" id="tarifa-minima" step="0.01" value="1457.00">
+                        </div>
+                        <div class="input-group">
+                            <label>Comisión de Plataforma (%)</label>
+                            <input type="number" id="comision" step="0.01" value="25.00" max="100">
+                        </div>
+                        <button class="btn btn-primary" id="save-settings">
+                            <i class="fas fa-save"></i> Guardar Configuración
+                        </button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Datos</h3>
+                    <div class="data-controls">
+                        <button class="btn btn-warning" id="export-data">
+                            <i class="fas fa-download"></i> Exportar Datos
+                        </button>
+                        <button class="btn btn-danger" id="clear-data">
+                            <i class="fas fa-trash"></i> Borrar Todos los Datos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Trip Details -->
+    <div class="modal" id="trip-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Finalizar Jornada</h3>
+                <span class="close-modal" id="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Kilómetros Totales de la Jornada</label>
+                    <input type="number" id="modal-km" step="0.1" placeholder="0.0">
+                </div>
+                <div class="input-group">
+                    <label>Número de Viajes Realizados</label>
+                    <input type="number" id="modal-trips" placeholder="1" value="1">
+                </div>
+                <div class="summary-section">
+                    <h4>Resumen de la Jornada</h4>
+                    <div class="summary-item">
+                        <span>Duración:</span>
+                        <span id="summary-duration">--</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Ganancia Bruta:</span>
+                        <span id="summary-gross">$0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Comisión:</span>
+                        <span id="summary-commission">$0</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Ganancia Neta:</span>
+                        <span id="summary-net">$0</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-success" id="confirm-finish">
+                        <i class="fas fa-check"></i> Confirmar
+                    </button>
+                    <button class="btn btn-secondary" id="cancel-finish">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

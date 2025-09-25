@@ -1,0 +1,33 @@
+{
+    "name": "Mi Jornada Pro",
+    "short_name": "JornadaPro",
+    "description": "Aplicación para repartidores de Cabify - Registro de jornadas y cálculo de ganancias",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#667eea",
+    "theme_color": "#667eea",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "es-ES",
+    "icons": [
+        {
+            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9Ijk2IiBjeT0iOTYiIHI9Ijk2IiBmaWxsPSIjNjY3ZWVhIi8+CjxwYXRoIGQ9Ik03MiA4NEMxMDggODQgMTIwIDk2IDEyMCAxMDhDMTIwIDEyMCAxMDggMTMyIDcyIDEzMkM0OCAxMzIgNDggMTA4IDQ4IDEwOEM0OCA5NiA1MCA4NCA3MiA4NFoiIGZpbGw9IndoaXRlIi8+CjxjaXJjbGUgY3g9Ijc2IiBjeT0iOTYiIHI9IjgiIGZpbGw9IiM2NjdlZWEiLz4KPGNpcmNsZSBjeD0iMTA4IiBjeT0iOTYiIHI9IjgiIGZpbGw9IiM2NjdlZWEiLz4KPHBhdGggZD0iTTY0IDEwOEM2NCA5NiA3MiA4NCA4NCA4NEMxMDAgODQgMTEyIDk2IDExMiAxMDhIMTA4QzEwOCAxMDAgMTAwIDkyIDkyIDkyQzg0IDkyIDc2IDEwMCA3NiAxMDhINjRaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNNjggMTQ0TDc2IDE0NEw4MCAxNTJMMTEyIDE1MkwxMTYgMTQ0TDEyNCAxNDRMMTMyIDEzNkwxNDQgMTM2TDE0NCAxNTJMMTYwIDE1MkwxNjAgMTY4TDMyIDE2OEwzMiAxNTJMNDggMTUyTDQ4IDEzNkw2MCAxMzZMNjggMTQ0WiIgZmlsbD0id2hpdGUiLz4KPHN2Zz4K",
+            "sizes": "192x192",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjU2IiBmaWxsPSIjNjY3ZWVhIi8+CjxwYXRoIGQ9Ik0xOTIgMjI0QzI4OCAyMjQgMzIwIDI1NiAzMjAgMjg4QzMyMCAzMjAgMjg4IDM1MiAxOTIgMzUyQzEyOCAzNTIgMTI4IDI4OCAxMjggMjg4QzEyOCAyNTYgMTMzIDIyNCAxOTIgMjI0WiIgZmlsbD0id2hpdGUiLz4KPGNpcmNsZSBjeD0iMjAzIiBjeT0iMjU2IiByPSIyMSIgZmlsbD0iIzY2N2VlYSIvPgo8Y2lyY2xlIGN4PSIyODgiIGN5PSIyNTYiIHI9IjIxIiBmaWxsPSIjNjY3ZWVhIi8+CjxwYXRoIGQ9Ik0xNzEgMjg4QzE3MSAyNTYgMTkyIDIyNCAxOTIgMjI0QzI2NyAyMjQgMjk4IDI1NiAyOTggMjg4SDI4OEMyODggMjY3IDI2NyAyNDUgMjQ1IDI0NUMyMjQgMjQ1IDIwMyAyNjcgMjAzIDI4OEgxNzFaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTgxIDM4NEwyMDMgMzg0TDIxMyA0MDVIMjk5TDMwOSAzODRIMzMxTDM1MiAzNjNIMzg0IDM2M0wzODQgNDA1TDQyNyA0MDVMNDI3IDQ0OEw4NSA0NDhMODUgNDA1TDEyOCA0MDVMMTI4IDM2M0wxNjAgMzYzTDE4MSAzODRaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K",
+            "sizes": "512x512",
+            "type": "image/svg+xml"
+        }
+    ],
+    "categories": ["productivity", "business", "finance"],
+    "screenshots": [],
+    "features": [
+        "Cross-platform PWA",
+        "Offline functionality",
+        "Real-time earnings calculator",
+        "Journey tracking",
+        "Detailed reports"
+    ]
+}
